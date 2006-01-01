@@ -4,9 +4,8 @@ NAME
 
 SYNOPSIS
         use Catalyst qw/ Session Session::Store::Memcached Session::State::Foo /;
-    
-        MyApp->config->{session} = {
-            expires => 3600,
+        
+    MyApp->config->{session} = {
             memcached_new_args => {
                 # L<Cache::Memcached::Managed/new>
                 'data' => [ "10.0.0.15:11211", "10.0.0.15:11212" ],
@@ -54,9 +53,6 @@ CONFIGURATION
         data
             The data server to use defaults to "localhost:11211".
 
-        expiration
-            "$c->config->{session}{expires}",
-
         namespace
             "catalyst_session"
 
@@ -78,8 +74,17 @@ AUTHORS
     This module is derived from Catalyst::Plugin::Session::FastMmap code,
     and has been heavily modified since.
 
-    Andrew Ford Andy Grundman Christian Hansen Yuval Kogman,
-    "nothingmuch@woobling.org" Marcus Ramberg Sebastian Riedel
+    Andrew Ford
+
+    Andy Grundman
+
+    Christian Hansen
+
+    Yuval Kogman, "nothingmuch@woobling.org"
+
+    Marcus Ramberg
+
+    Sebastian Riedel
 
     head1 COPYRIGHT
 

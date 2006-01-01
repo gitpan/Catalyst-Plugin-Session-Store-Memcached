@@ -12,7 +12,7 @@ use NEXT;
 use Cache::Memcached::Managed;
 use Catalyst::Exception;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 __PACKAGE__->mk_classdata($_)
   for qw/_session_memcached_storage _session_memcached_arg_fudge/;
@@ -27,7 +27,6 @@ session data.
     use Catalyst qw/ Session Session::Store::Memcached Session::State::Foo /;
     
     MyApp->config->{session} = {
-        expires => 3600,
         memcached_new_args => {
             # L<Cache::Memcached::Managed/new>
             'data' => [ "10.0.0.15:11211", "10.0.0.15:11212" ],
@@ -65,21 +64,26 @@ L<Catalyst::Plugin::Session::Store>.
 =cut
 
 sub get_session_data {
-    my ( $c, $sid ) = @_;
+    my ( $c, $key ) = @_;
     $c->_session_memcached_storage->get( @{ $c->_session_memcached_arg_fudge },
-        id => $sid, );
+        id => $key, );
 }
 
 sub store_session_data {
-    my ( $c, $sid, $data ) = @_;
+    my ( $c, $key, $data ) = @_;
 
     $c->_session_memcached_storage->set(
         @{ $c->_session_memcached_arg_fudge },
-        id    => $sid,
+        (
+            $key =~ /^(?:expires|session|flash)/
+              ? ( expiration => $c->session_expires )
+              : ()
+        ),
+        id    => $key,
         value => $data,
       )
       or Catalyst::Exception->throw(
-        "Couldn't save $sid / $data in memcached storage");
+        "Couldn't save $key / $data in memcached storage");
 }
 
 sub delete_session_data {
@@ -108,9 +112,8 @@ sub setup_session {
 
     $c->_session_memcached_storage(
         my $storage = $cfg->{memcached_obj} || Cache::Memcached::Managed->new(
-            data       => "localhost:11211",
-            expiration => $cfg->{expires},
-            namespace  => "catalyst_session",
+            data      => "localhost:11211",
+            namespace => "catalyst_session",
             %{ $cfg->{memcached_new_args} || {} },
         ),
     );
@@ -151,10 +154,6 @@ Some default values will be used:
 
 The data server to use defaults to C<localhost:11211>.
 
-=item expiration
-
-C<< $c->config->{session}{expires} >>,
-
 =item namespace
 
 C<"catalyst_session">
@@ -192,10 +191,15 @@ This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
 has been heavily modified since.
 
 Andrew Ford
+
 Andy Grundman
+
 Christian Hansen
+
 Yuval Kogman, C<nothingmuch@woobling.org>
+
 Marcus Ramberg
+
 Sebastian Riedel
 
 head1 COPYRIGHT

@@ -1,6 +1,6 @@
 ---
 name: Catalyst-Plugin-Session-Store-Memcached
-version: 0.01
+version: 0.02
 author: ~
 abstract: |-
   Memcached storage backend for
@@ -12,5 +12,5 @@ requires:
 provides:
   Catalyst::Plugin::Session::Store::Memcached:
     file: lib/Catalyst/Plugin/Session/Store/Memcached.pm
-    version: 0.01
+    version: 0.02
 generated_by: Module::Build version 0.2611
