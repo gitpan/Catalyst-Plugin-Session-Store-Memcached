@@ -1,16 +1,22 @@
 ---
-name: Catalyst-Plugin-Session-Store-Memcached
-version: 0.02
-author: ~
-abstract: |-
-  Memcached storage backend for
-  session data.
+abstract: 'Memcached storage backend for'
+author:
+  - 'This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and'
+distribution_type: module
+generated_by: 'Module::Install version 0.78'
 license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Catalyst-Plugin-Session-Store-Memcached
+no_index:
+  directory:
+    - inc
+    - t
 requires:
   Cache::Memcached::Managed: 0
   Catalyst::Plugin::Session: 0.01
-provides:
-  Catalyst::Plugin::Session::Store::Memcached:
-    file: lib/Catalyst/Plugin/Session/Store/Memcached.pm
-    version: 0.02
-generated_by: Module::Build version 0.2611
+  MRO::Compat: 0
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.03

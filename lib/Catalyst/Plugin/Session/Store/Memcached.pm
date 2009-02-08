@@ -1,18 +1,18 @@
 package Catalyst::Plugin::Session::Store::Memcached;
-
 use strict;
+use warnings;
 
 use base qw/
-  Class::Data::Inheritable
   Class::Accessor::Fast
+  Class::Data::Inheritable
   Catalyst::Plugin::Session::Store
-  /;
+/;
 
-use NEXT;
+use MRO::Compat;
 use Cache::Memcached::Managed;
 use Catalyst::Exception;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->mk_classdata($_)
   for qw/_session_memcached_storage _session_memcached_arg_fudge/;
@@ -104,7 +104,7 @@ Sets up the session cache file.
 sub setup_session {
     my $c = shift;
 
-    $c->NEXT::setup_session(@_);
+    $c->maybe::next::method(@_);
 
     my $cfg = $c->config->{session};
 
@@ -189,6 +189,8 @@ L<Catalyst>, L<Catalyst::Plugin::Session>, L<Cache::Memcached>.
 
 This module is derived from L<Catalyst::Plugin::Session::FastMmap> code, and
 has been heavily modified since.
+
+Tomas Doran, (t0m) C<bobtfish@bobtfish.net> - current maintainer.
 
 Andrew Ford
 
