@@ -12,7 +12,7 @@ use MRO::Compat;
 use Cache::Memcached::Managed;
 use Catalyst::Exception;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 __PACKAGE__->mk_classdata($_)
   for qw/_session_memcached_storage _session_memcached_arg_fudge/;
@@ -25,17 +25,19 @@ session data.
 =head1 SYNOPSIS
 
     use Catalyst qw/ Session Session::Store::Memcached Session::State::Foo /;
-    
-    MyApp->config->{session} = {
-        memcached_new_args => {
-            # L<Cache::Memcached::Managed/new>
-            'data' => [ "10.0.0.15:11211", "10.0.0.15:11212" ],
+
+    MyApp->config(
+        'Plugin::Session' => {
+            memcached_new_args => {
+                # L<Cache::Memcached::Managed/new>
+                'data' => [ "10.0.0.15:11211", "10.0.0.15:11212" ],
+            },
+            memcached_item_args => {
+                # L<Cache::Memcached::Managed/set>, get, delete
+                # ...
+            },
         },
-        memcached_item_args => {
-            # L<Cache::Memcached::Managed/set>, get, delete
-            # ...
-        },
-    };
+    );
 
     # ... in an action:
     $c->session->{foo} = 'bar';    # will be saved
@@ -106,7 +108,7 @@ sub setup_session {
 
     $c->maybe::next::method(@_);
 
-    my $cfg = $c->config->{session};
+    my $cfg = $c->_session_plugin_config;
 
     my $appname = "$c";
 
@@ -131,7 +133,7 @@ sub setup_session {
 
 =head1 CONFIGURATION
 
-These parameters are placed in the hash under the C<session> key in the
+These parameters are placed in the hash under the C<Plugin::Session> key in the
 configuration hash.
 
 =over 4

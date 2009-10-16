@@ -1,3 +1,6 @@
+0.04 2009-10-16
+  - Port to new session config key
+
 0.03 2009-02-08
   - Switch Module::Build to Module::Install
   - Switch from NEXT to MRO::Compat
