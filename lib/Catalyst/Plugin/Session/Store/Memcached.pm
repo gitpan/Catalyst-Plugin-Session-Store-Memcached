@@ -1,18 +1,18 @@
 package Catalyst::Plugin::Session::Store::Memcached;
-use strict;
-use warnings;
 
-use base qw/
-  Class::Accessor::Fast
-  Class::Data::Inheritable
-  Catalyst::Plugin::Session::Store
-/;
+use Moose;
+
+extends 'Catalyst::Plugin::Session::Store';
+
+with 'MooseX::Emulate::Class::Accessor::Fast';
+with 'Catalyst::ClassData';
 
 use MRO::Compat;
+use namespace::clean -except => 'meta';
 use Cache::Memcached::Managed;
 use Catalyst::Exception;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 __PACKAGE__->mk_classdata($_)
   for qw/_session_memcached_storage _session_memcached_arg_fudge/;
@@ -213,4 +213,4 @@ under the same terms as Perl itself.
 
 =cut
 
-1;
+__PACKAGE__->meta->make_immutable;

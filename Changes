@@ -1,3 +1,6 @@
+0.05 2012-04-04
+  - Upgrade code to use Moose compatibility layer
+
 0.04 2009-10-16
   - Port to new session config key
 
